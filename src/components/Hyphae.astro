@@ -1,0 +1,93 @@
+---
+/**
+ * Hyphae · línea micelial SVG ramificada.
+ * Variantes:
+ *   - "center" : tres hifas convergiendo en un esporangio central (divisor)
+ *   - "branch" : una hifa con ramificación lateral y espora terminal
+ *   - "trail"  : línea de puntos (spore trail) horizontal
+ *   - "trio"   : tres hifas verticales con esporas en los extremos
+ */
+interface Props {
+  variant?: "center" | "branch" | "trail" | "trio";
+  color?: "hyphae" | "spore" | "accent";
+  className?: string;
+}
+const { variant = "center", color = "hyphae", className = "" } = Astro.props;
+
+const stroke = {
+  hyphae: "var(--color-hyphae)",
+  spore:  "var(--color-spore)",
+  accent: "var(--color-accent)",
+}[color];
+
+const fill = {
+  hyphae: "var(--color-hyphae-glow)",
+  spore:  "var(--color-spore)",
+  accent: "var(--color-accent)",
+}[color];
+---
+
+{variant === "center" && (
+  <svg
+    class:list={["hyphae-line", className]}
+    viewBox="0 0 400 24"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <path d="M 0 12 C 80 12, 140 4, 180 12" stroke={stroke} stroke-width="0.8" fill="none" />
+    <path d="M 400 12 C 320 12, 260 20, 220 12" stroke={stroke} stroke-width="0.8" fill="none" />
+    <path d="M 130 12 C 150 6, 170 18, 200 12" stroke={stroke} stroke-width="0.6" fill="none" opacity="0.7" />
+    <path d="M 270 12 C 250 18, 230 6, 200 12" stroke={stroke} stroke-width="0.6" fill="none" opacity="0.7" />
+    <circle cx="200" cy="12" r="2" fill={fill} />
+    <circle cx="180" cy="12" r="1" fill={fill} opacity="0.6" />
+    <circle cx="220" cy="12" r="1" fill={fill} opacity="0.6" />
+  </svg>
+)}
+
+{variant === "branch" && (
+  <svg
+    class:list={["hyphae-line", className]}
+    viewBox="0 0 400 24"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <path d="M 0 12 L 380 12" stroke={stroke} stroke-width="0.7" fill="none" />
+    <path d="M 220 12 C 240 4, 260 4, 280 8" stroke={stroke} stroke-width="0.6" fill="none" opacity="0.7" />
+    <path d="M 320 12 C 340 20, 360 20, 380 16" stroke={stroke} stroke-width="0.6" fill="none" opacity="0.7" />
+    <circle cx="380" cy="12" r="2.5" fill={fill} />
+    <circle cx="280" cy="8"  r="1.2" fill={fill} opacity="0.7" />
+  </svg>
+)}
+
+{variant === "trail" && (
+  <svg
+    class:list={["hyphae-line", className]}
+    viewBox="0 0 400 6"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <circle cx="20"  cy="3" r="1" fill={fill} />
+    <circle cx="60"  cy="3" r="1" fill={fill} />
+    <circle cx="100" cy="3" r="1" fill={fill} />
+    <circle cx="140" cy="3" r="1" fill={fill} />
+    <circle cx="180" cy="3" r="1.6" fill={fill} />
+    <circle cx="220" cy="3" r="1" fill={fill} />
+    <circle cx="260" cy="3" r="1" fill={fill} />
+    <circle cx="300" cy="3" r="1" fill={fill} />
+    <circle cx="340" cy="3" r="1" fill={fill} />
+    <circle cx="380" cy="3" r="1" fill={fill} />
+  </svg>
+)}
+
+{variant === "trio" && (
+  <div class="hyphae-vertical" aria-hidden="true">
+    <svg viewBox="0 0 24 64" preserveAspectRatio="none">
+      <path d="M 12 0 C 8 16, 16 32, 12 60" stroke={stroke} stroke-width="0.8" fill="none" />
+      <path d="M 12 30 C 4 36, 4 44, 8 50" stroke={stroke} stroke-width="0.6" fill="none" opacity="0.6" />
+      <path d="M 12 30 C 20 36, 20 44, 16 50" stroke={stroke} stroke-width="0.6" fill="none" opacity="0.6" />
+      <circle cx="12" cy="60" r="2.5" fill={fill} />
+      <circle cx="8"  cy="50" r="1.2" fill={fill} opacity="0.6" />
+      <circle cx="16" cy="50" r="1.2" fill={fill} opacity="0.6" />
+    </svg>
+  </div>
+)}

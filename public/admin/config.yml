@@ -1,0 +1,247 @@
+# Sveltia CMS — Revista Micelio
+# Documentación: https://github.com/sveltia/sveltia-cms
+
+backend:
+  name: github
+  repo: revistamicelio/revistamicelio-web
+  branch: main
+  base_url: https://revistamicelio.com/api/auth
+  auth_endpoint: api/auth
+  open_authoring: false
+  squash_merges: true
+
+# Subida de medios
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+# Locale del panel
+locale: es
+
+# Editor
+editor:
+  preview: false
+
+# ──────────────────────────────────────────────
+# Publicaciones: 7 tipos con límites y metadatos
+# ──────────────────────────────────────────────
+collections:
+  - name: "publicaciones"
+    label: "Publicaciones"
+    label_singular: "Publicación"
+    folder: "src/content/publicaciones"
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "{{titulo}} — {{autor}}"
+    sortable_fields: ["fecha", "titulo", "autor"]
+    view_filters:
+      - label: "Reseñas"
+        field: tipo
+        pattern: "resena"
+      - label: "Ensayos académicos"
+        field: tipo
+        pattern: "ensayoAcademico"
+      - label: "Ensayos narrativos"
+        field: tipo
+        pattern: "ensayoNarrativo"
+      - label: "Entrevistas"
+        field: tipo
+        pattern: "entrevista"
+      - label: "Narrativa"
+        field: tipo
+        pattern: "narrativa"
+      - label: "Poesía"
+        field: tipo
+        pattern: "poesia"
+      - label: "Traducciones"
+        field: tipo
+        pattern: "traduccion"
+    view_groups:
+      - label: "Tipo"
+        field: tipo
+    fields:
+      - label: "Tipo de publicación"
+        name: "tipo"
+        widget: "select"
+        default: "ensayoNarrativo"
+        options:
+          - { label: "Reseña (máx. 1.000 palabras)", value: "resena" }
+          - { label: "Ensayo académico (máx. 8.000, MLA/APA)", value: "ensayoAcademico" }
+          - { label: "Ensayo narrativo (máx. 3.500)", value: "ensayoNarrativo" }
+          - { label: "Entrevista (máx. 5.000)", value: "entrevista" }
+          - { label: "Narrativa (máx. 3.000)", value: "narrativa" }
+          - { label: "Poesía (máx. 5 páginas)", value: "poesia" }
+          - { label: "Traducción", value: "traduccion" }
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Autor/a", name: "autor", widget: "string" }
+      - { label: "Fecha", name: "fecha", widget: "datetime", picker_utc: false, format: "YYYY-MM-DD" }
+      - { label: "Resumen", name: "resumen", widget: "text", required: false }
+      - { label: "Imagen de portada", name: "portada", widget: "image", required: false, allow_multiple: false }
+      - label: "Formato de citas (ensayos académicos)"
+        name: "citas"
+        widget: "select"
+        required: "{{fields.tipo == 'ensayoAcademico'}}"
+        options: ["MLA", "APA"]
+      - label: "Conteo de palabras"
+        name: "wordCount"
+        widget: "number"
+        required: "{{fields.tipo == 'resena' || fields.tipo == 'ensayoAcademico' || fields.tipo == 'ensayoNarrativo' || fields.tipo == 'entrevista' || fields.tipo == 'narrativa'}}"
+        hint: "Validado por Zod en el schema."
+      - label: "Páginas (poesía)"
+        name: "paginas"
+        widget: "number"
+        required: "{{fields.tipo == 'poesia'}}"
+        min: 1
+        max: 5
+      - label: "URL del texto original (traducciones)"
+        name: "original"
+        widget: "url"
+        required: "{{fields.tipo == 'traduccion'}}"
+      - label: "Metadatos de derechos (traducciones)"
+        name: "derechos"
+        widget: "string"
+        required: "{{fields.tipo == 'traduccion'}}"
+      - { label: "Cuerpo", name: "body", widget: "markdown" }
+
+  # ──────────────────────────────────────────
+  # Listas bibliográficas (4 categorías)
+  # ──────────────────────────────────────────
+  - name: "listas"
+    label: "Listas"
+    label_singular: "Lista"
+    folder: "src/content/listas"
+    create: true
+    slug: "{{categoria}}"
+    extension: mdx
+    format: frontmatter
+    summary: "{{titulo}}"
+    sortable_fields: ["categoria", "titulo", "autor", "anio"]
+    view_filters:
+      - { label: "Animales no-humanos",     field: categoria, pattern: "animales-no-humanos" }
+      - { label: "Naturaleza y ambiente",   field: categoria, pattern: "naturaleza-ambiente" }
+      - { label: "Fabulación especulativa", field: categoria, pattern: "fabulacion-especulativa" }
+      - { label: "Cli-fi latinoamericano",  field: categoria, pattern: "cli-fi-latinoamericano" }
+    fields:
+      - label: "Categoría"
+        name: "categoria"
+        widget: "select"
+        default: "naturaleza-ambiente"
+        options:
+          - { label: "Animales no-humanos y ética animal", value: "animales-no-humanos" }
+          - { label: "Naturaleza y ambiente",             value: "naturaleza-ambiente" }
+          - { label: "Fabulación especulativa",           value: "fabulacion-especulativa" }
+          - { label: "Cli-fi latinoamericano",            value: "cli-fi-latinoamericano" }
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Autor/a", name: "autor", widget: "string", required: false }
+      - { label: "Año", name: "anio", widget: "number", required: false, value_type: "int", min: 0, max: 2100 }
+      - { label: "Tipo de referencia", name: "tipoReferencia", widget: "select", required: false,
+          options: ["obra", "articulo", "ensayo-propio", "referencia-teorica"], default: "obra" }
+      - { label: "Descripción", name: "descripcion", widget: "text", required: false }
+      - { label: "Conceptos clave", name: "conceptos", widget: "list", required: false, default: [] }
+      - { label: "URL", name: "url", widget: "url", required: false }
+      - { label: "Cuerpo", name: "body", widget: "markdown" }
+
+  # ──────────────────────────────────────────
+  # Subtemas: sub-listas dentro de cada categoría
+  # ──────────────────────────────────────────
+  - name: "subtemas"
+    label: "Subtemas"
+    label_singular: "Subtema"
+    folder: "src/content/subtemas"
+    create: true
+    slug: "{{categoria}}--{{subtema}}"
+    extension: mdx
+    format: frontmatter
+    summary: "{{titulo}}"
+    sortable_fields: ["categoria", "orden", "titulo"]
+    view_filters:
+      - { label: "Animales no-humanos",     field: categoria, pattern: "animales-no-humanos" }
+      - { label: "Naturaleza y ambiente",   field: categoria, pattern: "naturaleza-ambiente" }
+      - { label: "Fabulación especulativa", field: categoria, pattern: "fabulacion-especulativa" }
+      - { label: "Cli-fi latinoamericano",  field: categoria, pattern: "cli-fi-latinoamericano" }
+    fields:
+      - label: "Categoría"
+        name: "categoria"
+        widget: "select"
+        default: "naturaleza-ambiente"
+        options:
+          - { label: "Animales no-humanos y ética animal", value: "animales-no-humanos" }
+          - { label: "Naturaleza y ambiente",             value: "naturaleza-ambiente" }
+          - { label: "Fabulación especulativa",           value: "fabulacion-especulativa" }
+          - { label: "Cli-fi latinoamericano",            value: "cli-fi-latinoamericano" }
+      - { label: "Subtema (slug)", name: "subtema", widget: "string" }
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Descripción", name: "descripcion", widget: "text", required: false }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 0, min: 0, max: 99 }
+      - { label: "Cuerpo (lista de referencias)", name: "body", widget: "markdown" }
+
+  # ──────────────────────────────────────────
+  # Sesiones del s-Lab
+  # ──────────────────────────────────────────
+  - name: "sesiones"
+    label: "s-Lab · Sesiones"
+    label_singular: "Sesión"
+    folder: "src/content/sesiones"
+    create: true
+    slug: "sesion-{{slug}}"
+    extension: mdx
+    format: frontmatter
+    summary: "{{titulo}} — {{fecha}}"
+    sortable_fields: ["fecha", "titulo"]
+    fields:
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Fecha", name: "fecha", widget: "datetime", picker_utc: false, format: "YYYY-MM-DD" }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - { label: "Facilitador/a", name: "facilitador", widget: "string", required: false }
+      - { label: "Participantes", name: "participantes", widget: "list", required: false, default: [] }
+      - { label: "Ejes temáticos", name: "ejes", widget: "list", required: false, default: [] }
+      - { label: "Cuerpo", name: "body", widget: "markdown" }
+
+  # ──────────────────────────────────────────
+  # Páginas estáticas (La revista, Convocatoria)
+  # ──────────────────────────────────────────
+  - name: "pages"
+    label: "Páginas"
+    label_singular: "Página"
+    folder: "src/content/pages"
+    create: false
+    slug: "{{slug}}"
+    extension: mdx
+    format: frontmatter
+    summary: "{{titulo}}"
+    fields:
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Descripción (meta)", name: "descripcion", widget: "text", required: false }
+      - { label: "Cuerpo", name: "body", widget: "markdown" }
+
+  # ──────────────────────────────────────────
+  # Bibliografía del sitio (editable)
+  # ──────────────────────────────────────────
+  - name: "creditos"
+    label: "Bibliografía del sitio"
+    label_singular: "Crédito"
+    folder: "src/content/creditos"
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "{{obra}} — {{autor}}"
+    sortable_fields: ["orden", "autor", "anio", "tipo"]
+    fields:
+      - { label: "Obra", name: "obra", widget: "string" }
+      - { label: "Autor/a", name: "autor", widget: "string" }
+      - { label: "Año", name: "anio", widget: "number", required: false, value_type: "int", min: 0, max: 2100 }
+      - label: "Tipo"
+        name: "tipo"
+        widget: "select"
+        default: "libro"
+        options:
+          - { label: "Libro",     value: "libro" }
+          - { label: "Video",     value: "video" }
+          - { label: "Artículo",  value: "articulo" }
+          - { label: "Audio",     value: "audio" }
+          - { label: "Sitio web", value: "sitio-web" }
+      - { label: "URL", name: "url", widget: "url", required: false }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 0, min: 0, max: 999 }
+      - { label: "Nota", name: "body", widget: "markdown", required: false }

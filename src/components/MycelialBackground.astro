@@ -1,0 +1,48 @@
+---
+/**
+ * MycelialBackground · ilustración micelial como ornamento de fondo.
+ * Imagen PNG (color original) a baja opacidad, fija en el fondo de la página.
+ * Sustituye a la red SVG de hifas — la ilustración es ahora la fuente gráfica
+ * del ambiente del sitio.
+ *
+ * Responsive: <picture> con source media (max-width: 600px) sirve la variante
+ * liviana de 600 px en mobile; en desktop se sirve la de 1200 px. Ambas son
+ * PNGs, no AVIF/WebP, para mantener paridad con el build estático.
+ */
+interface Props {
+  opacity?: number;
+  position?: "bottom" | "center" | "top";
+}
+const { opacity = 0.12, position = "bottom" } = Astro.props;
+
+const positions = {
+  bottom: "bottom: -5%; right: -5%;",
+  center: "top: 50%; left: 50%; transform: translate(-50%, -50%);",
+  top:    "top: -5%; left: -5%;",
+};
+---
+
+<div class="mycelial-network" aria-hidden="true" style={`opacity: ${opacity};`}>
+  <picture>
+    <source media="(max-width: 600px)" srcset="/mycelial-violet-600.png" />
+    <img
+      src="/mycelial-violet-1200.png"
+      alt=""
+      role="presentation"
+      loading="eager"
+      decoding="async"
+      fetchpriority="low"
+      class="block max-w-full"
+      style={`
+        position: fixed;
+        width: min(140vw, 1200px);
+        height: auto;
+        pointer-events: none;
+        user-select: none;
+        ${positions[position]}
+        mix-blend-mode: screen;
+        filter: drop-shadow(0 0 24px rgba(175, 160, 200, 0.25));
+      `}
+    />
+  </picture>
+</div>

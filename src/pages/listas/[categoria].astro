@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionDivider from "../../components/SectionDivider.astro";
+import ColumnSet from "../../components/ColumnSet.astro";
+import Column from "../../components/Column.astro";
+import Sporangium from "../../components/Sporangium.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const listas = await getCollection("listas");
+  const subtemas = await getCollection("subtemas");
+  const seen = new Set<string>();
+  const paths: { params: { categoria: string }; props: { main: CollectionEntry<"listas">; related: CollectionEntry<"listas">[]; subtemas: CollectionEntry<"subtemas">[] } }[] = [];
+
+  for (const entry of listas) {
+    if (seen.has(entry.data.categoria)) continue;
+    seen.add(entry.data.categoria);
+    const related = listas.filter(
+      (l) => l.data.categoria === entry.data.categoria && l.id !== entry.id
+    );
+    const catSubtemas = subtemas
+      .filter((s) => s.data.categoria === entry.data.categoria)
+      .sort((a, b) => a.data.orden - b.data.orden);
+    paths.push({
+      params: { categoria: entry.data.categoria },
+      props: { main: entry, related, subtemas: catSubtemas },
+    });
+  }
+  return paths;
+}
+
+interface Props {
+  main: CollectionEntry<"listas">;
+  related: CollectionEntry<"listas">[];
+  subtemas: CollectionEntry<"subtemas">[];
+}
+
+const { main, related, subtemas } = Astro.props;
+const { Content } = await render(main);
+---
+
+<BaseLayout title={main.data.titulo} description={main.data.descripcion}>
+  <a href="/listas/" class="versalita spore-trail no-underline hover:text-[var(--color-accent)]">
+    ← Listas
+  </a>
+
+  <article class="mt-12">
+    <ColumnSet gutter="2rem">
+      <Column span={12} md={3}>
+        <div class="mb-4 flex items-center gap-2">
+          <Sporangium variant="pair" color="spore" size={16} />
+          <p class="versalita m-0">Lista</p>
+        </div>
+        {main.data.conceptos.length > 0 && (
+          <ul class="versalita flex flex-col gap-y-1">
+            {main.data.conceptos.map((c) => <li>{c}</li>)}
+          </ul>
+        )}
+      </Column>
+
+      <Column span={12} md={9}>
+        <header class="pb-12">
+          <h1 class="h1-tilt mb-6" style="font-style: italic;">{main.data.titulo}</h1>
+          {main.data.descripcion && (
+            <p class="lead">{main.data.descripcion}</p>
+          )}
+        </header>
+
+        <div class="prose first-p-lead prose-invert">
+          <Content />
+        </div>
+      </Column>
+    </ColumnSet>
+
+    {subtemas.length > 0 && (
+      <section class="mt-24">
+        <SectionDivider />
+        <h2 class="asterisco-titulo mb-10 mt-12">Subtemas</h2>
+        <ul class="space-y-6">
+          {subtemas.map((s) => (
+            <li>
+              <a
+                href={`/listas/${main.data.categoria}/${s.data.subtema}/`}
+                class="versalita text-[var(--color-accent)] no-underline hover:text-[var(--color-ink)]"
+              >
+                {s.data.titulo}
+              </a>
+              {s.data.descripcion && (
+                <p class="mt-1 text-[var(--color-ink)]/80 italic">{s.data.descripcion}</p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </article>
+
+  {related.length > 0 && (
+    <section class="mt-24">
+      <SectionDivider />
+      <h2 class="asterisco-titulo mb-10 mt-12">Otras referencias en esta lista</h2>
+      <ul class="space-y-12">
+        {related.map((r) => (
+          <li>
+            <p class="versalita mb-2">{r.data.tipoReferencia.replace("-", " ")}</p>
+            <h3
+              class="mb-2 text-[var(--color-ink)]"
+              style="font-style: italic; font-size: clamp(1.25rem, 2vw, 1.5rem);"
+            >
+              {r.data.titulo}
+            </h3>
+            <p class="versalita mb-3">
+              {r.data.autor}{r.data.anio ? ` · ${r.data.anio}` : ""}
+            </p>
+            {r.data.descripcion && (
+              <p class="max-w-prose text-[var(--color-ink)]/90">{r.data.descripcion}</p>
+            )}
+            {r.data.url && (
+              <a href={r.data.url} rel="noopener" class="versalita mt-3 inline-block text-[var(--color-accent)] no-underline hover:text-[var(--color-ink)]">
+                Ver referencia →
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</BaseLayout>

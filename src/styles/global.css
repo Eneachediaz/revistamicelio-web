@@ -1,0 +1,630 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@import "@fontsource-variable/fraunces/full.css";
+@import "@fontsource-variable/source-serif-4/opsz.css";
+@import "@fontsource-variable/inter/opsz.css";
+
+/* ─────────────────────────────────────────────────────────────
+   Fungic horror · putrefaction palette
+   Bruise violet #9b5fb5 · spore ochre #c89a3a · hyphae green #7fb56a
+   Pale bone ink sobre negro verdoso · red de hifas en background
+   Fraunces (display) · Source Serif 4 (cuerpo) · Inter (UI)
+   WCAG: ink/bg 13.8:1 (AAA) · accent/bg 5.2:1 (AA)
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  /* Superficies — palimpsesto de noche con matiz orgánico */
+  --color-bg:           #08090a;
+  --color-surface:      #101210;
+  --color-surface-2:    #181a16;
+  --color-border:       #2a2c22;
+
+  /* Texto — nunca blanco puro */
+  --color-ink:          #d8d3b6;
+  --color-ink-muted:    #8a8770;
+
+  /* Tríada de acentos · putrefacción */
+  --color-accent:       #9b5fb5;   /* violet de cardenalo — primario */
+  --color-accent-soft:  #2c1a3a;
+  --color-spore:        #c89a3a;   /* ocre espora — secundario */
+  --color-hyphae:       #7fb56a;   /* verde fosforescente — hifas */
+  --color-hyphae-glow:  #a8d185;
+
+  /* Tipografía */
+  --font-display: "Fraunces Variable", "Fraunces", ui-serif, Georgia, serif;
+  --font-body:    "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
+  --font-sans:    "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Base · reset editorial + viñeta de fondo profundo */
+html {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.65;
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% 30%, transparent 0%, rgba(0,0,0,0.35) 100%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(155, 95, 181, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(127, 181, 106, 0.03) 0%, transparent 60%);
+  background-attachment: fixed;
+}
+
+main { flex: 1 0 auto; }
+
+/* ─────────────────────────────────────────────────────────────
+   Escala tipográfica editorial
+   h1 con WONK activo para asimetrías sutiles
+   ───────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+h1 {
+  font-variation-settings: "opsz" 144, "wonk" 1, "SOFT" 0;
+  font-weight: 350;
+  font-size: clamp(2.5rem, 9vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  font-variation-settings: "opsz" 60, "wonk" 0;
+  font-size: clamp(1.5rem, 3.5vw, 2.75rem);
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-variation-settings: "opsz" 30, "wonk" 0;
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+}
+
+h4 {
+  font-variation-settings: "opsz" 14, "wonk" 0;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+p { line-height: 1.7; }
+
+em, i { font-style: italic; }
+
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 150ms ease;
+}
+a:hover { color: var(--color-ink); }
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Versalita auxiliar · usada en badges de tipo, metadatos */
+.versalita {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* Asterisco editorial · motivo central del sitio */
+.asterisco {
+  display: block;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  font-variation-settings: "opsz" 144, "wonk" 1;
+  letter-spacing: 0;
+  user-select: none;
+}
+
+/* H2 con asteriscos magenta a los lados · patrón multiplicatio */
+.asterisco-titulo {
+  font-style: italic;
+  font-variation-settings: "opsz" 60, "wonk" 1;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+.asterisco-titulo::before,
+.asterisco-titulo::after {
+  content: "";
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin: 0 0.4em;
+  vertical-align: -0.05em;
+  background-color: var(--color-accent);
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13' stroke='black' stroke-width='2.5' stroke-linecap='round'/><circle cx='12' cy='12' r='1.5' fill='black'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13' stroke='black' stroke-width='2.5' stroke-linecap='round'/><circle cx='12' cy='12' r='1.5' fill='black'/></svg>");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  font-style: normal;
+}
+
+/* Lead italic · primer párrafo grande de cada página */
+.lead {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 60, "wonk" 0;
+  font-size: clamp(1.15rem, 2.2vw, 1.75rem);
+  line-height: 1.45;
+  color: var(--color-ink);
+  max-width: 60ch;
+  margin-block: 1.25rem 2.5rem;
+}
+
+/* Lead automático · primer párrafo de cualquier .prose.first-p-lead.
+   En publicaciones con `resumen` se omite (clase ausente) para no duplicar
+   el bloque display-itálico con el resumen. */
+.prose.first-p-lead > p:first-of-type {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 60, "wonk" 0;
+  font-size: clamp(1.15rem, 2.2vw, 1.75rem);
+  line-height: 1.45;
+  color: var(--color-ink);
+  max-width: 60ch;
+  margin-block: 1.25rem 2.5rem;
+}
+.prose.first-p-lead > p:first-of-type strong,
+.prose.first-p-lead > p:first-of-type em {
+  font-style: italic;
+}
+
+/* Triple asterisco · divisor editorial más sustancial */
+.asterisco-triple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-variation-settings: "opsz" 144, "wonk" 1;
+  letter-spacing: 0;
+  user-select: none;
+}
+
+/* Prose (MDX) */
+.prose {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-quotes: var(--color-ink-muted);
+  --tw-prose-quote-borders: var(--color-accent);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-pre-bg: var(--color-surface-2);
+  --tw-prose-pre-code: var(--color-ink);
+  --tw-prose-invert-body: var(--color-ink);
+  max-width: 62ch;
+  font-size: clamp(1rem, 0.95rem + 0.4vw, 1.05rem);
+  line-height: 1.75;
+}
+
+.prose :where(blockquote):not(:where([class~=not-prose] *)) {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 60, "wonk" 0;
+  font-size: 1.4em;
+  line-height: 1.3;
+  border-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* Focus accesible */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-ink);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-2);
+  border-radius: 5px;
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-border); }
+
+/* Utilidad · container editorial (más ancho) */
+.container-editorial {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 64rem;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) {
+  .container-editorial { padding-inline: 2.5rem; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   v3 · Dark ecology · sigil · atmospheric · drop-cap
+   ───────────────────────────────────────────────────────────── */
+
+/* AtmosphericImage · imagen con tratamiento atmosférico */
+.atmospheric {
+  isolation: isolate;
+  display: block;
+  overflow: hidden;
+}
+.atmospheric > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 0;
+}
+.atmospheric .overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(8,9,10,0.2) 0%, rgba(8,9,10,0.55) 50%, rgba(8,9,10,0.94) 100%);
+}
+.atmospheric .overlay[data-intensity="light"] {
+  background: linear-gradient(180deg, rgba(8,9,10,0.1) 0%, rgba(8,9,10,0.3) 100%);
+}
+.atmospheric .overlay[data-intensity="medium"] {
+  background: linear-gradient(180deg, rgba(8,9,10,0.3) 0%, rgba(8,9,10,0.68) 100%);
+}
+.atmospheric .overlay[data-intensity="heavy"] {
+  background: linear-gradient(180deg, rgba(8,9,10,0.55) 0%, rgba(8,9,10,0.94) 100%);
+}
+.atmospheric .grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+.atmospheric .tint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.atmospheric.bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  border-radius: 0;
+}
+
+/* MediaItem · imagen portfolio con hover 'mushroom glow' */
+.media-item {
+  display: block;
+  position: relative;
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+.media-item > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              filter 0.4s ease;
+}
+.media-zoom:hover > img {
+  transform: scale(1.05);
+  filter: brightness(0.78) saturate(1.1);
+}
+
+/* MediaItem intrinsic · imagen a tamaño natural, sin recorte.
+   Sin aspect-ratio forzado, sin object-fit cover, sin overflow hidden. */
+.media-item-intrinsic {
+  display: block;
+  position: static;
+  overflow: visible;
+  background: transparent;
+}
+.media-item.media-item-intrinsic > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: none;
+}
+
+/* MediaItem roto · fallback editorial con asterisco (mismo motivo que
+   PublicationCard cuando no hay portada). Activado por onerror en
+   MediaItem.astro. Sobrescribe .media-item-intrinsic (specificity 0,2,0). */
+.media-item.is-broken {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 2;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+.media-item.is-broken > img {
+  display: none;
+}
+.media-item.is-broken::after {
+  content: "*";
+  font-family: var(--font-display);
+  font-size: 5rem;
+  color: var(--color-accent);
+  opacity: 0.4;
+  font-variation-settings: "opsz" 144, "wonk" 1;
+  line-height: 1;
+}
+
+/* ColumnSet · sistema asimétrico 12-colas */
+.column-set {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+.column {
+  grid-column: span 12;
+}
+@media (min-width: 768px) {
+  .col-span-1 { grid-column: span 1; }
+  .col-span-2 { grid-column: span 2; }
+  .col-span-3 { grid-column: span 3; }
+  .col-span-4 { grid-column: span 4; }
+  .col-span-5 { grid-column: span 5; }
+  .col-span-6 { grid-column: span 6; }
+  .col-span-7 { grid-column: span 7; }
+  .col-span-8 { grid-column: span 8; }
+  .col-span-9 { grid-column: span 9; }
+  .col-span-10 { grid-column: span 10; }
+  .col-span-11 { grid-column: span 11; }
+  .col-span-12 { grid-column: span 12; }
+}
+
+/* Drop-cap · solo en posts sin resumen.
+   Heredan la condición de auto-lead: la letra capital aparece solo cuando
+   no hay `resumen` (clase `.first-p-lead` aplicada al wrapper). */
+.post-body.first-p-lead > p:first-of-type::first-letter,
+.prose.post-body.first-p-lead > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144, "wonk" 1;
+  font-style: italic;
+  font-size: 4.5em;
+  font-weight: 350;
+  float: left;
+  line-height: 0.85;
+  margin: 0.05em 0.12em 0 0;
+  color: var(--color-accent);
+  text-shadow: 0 0 24px var(--color-accent-soft);
+}
+.post-body.first-p-lead > p:first-of-type {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 60, "wonk" 0;
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  line-height: 1.4;
+  margin-bottom: 2rem;
+}
+
+/* Drop-cap mobile · reducir tamaño y altura de línea en pantallas chicas.
+   A 320-360 px el 4.5em ocupa más de 130 px y rompe el ritmo. */
+@media (max-width: 480px) {
+  .post-body.first-p-lead > p:first-of-type::first-letter,
+  .prose.post-body.first-p-lead > p:first-of-type::first-letter {
+    font-size: 3.25em;
+    line-height: 0.82;
+    margin: 0.06em 0.1em -0.05em 0;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Fungic horror · utilidades
+   ───────────────────────────────────────────────────────────── */
+
+/* Red micelial de fondo · contenedor del SVG grande */
+.mycelial-network {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.mycelial-network svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Hifa · línea fina ramificada usada en divisores y bordes */
+.hyphae-line {
+  display: block;
+  width: 100%;
+  height: 1.5rem;
+  color: var(--color-hyphae);
+  opacity: 0.55;
+  filter: drop-shadow(0 0 4px var(--color-hyphae-glow));
+}
+.hyphae-line svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Espora · dot bioluminiscente */
+.spore-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-spore);
+  box-shadow: 0 0 8px var(--color-spore);
+  transition: box-shadow 200ms ease, transform 200ms ease, background 200ms ease;
+  vertical-align: middle;
+}
+.spore-dot:hover,
+.group:hover .spore-dot,
+a:hover .spore-dot {
+  box-shadow: 0 0 14px var(--color-hyphae-glow);
+  background: var(--color-hyphae);
+  transform: scale(1.3);
+}
+.spore-dot[data-size="sm"] { width: 4px; height: 4px; }
+.spore-dot[data-size="lg"] { width: 9px; height: 9px; }
+
+/* Cluster de esporas (Sporangium) */
+.sporangium {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  vertical-align: middle;
+}
+
+/* Brillo bioluminiscente · decoración */
+.hyphae-glow {
+  filter: drop-shadow(0 0 6px var(--color-hyphae-glow));
+}
+
+/* Tilt orgánico para h1 grandes · solo desktop, en mobile agrega ruido */
+.h1-tilt {
+  transform-origin: left center;
+}
+@media (min-width: 768px) {
+  .h1-tilt {
+    transform: rotate(-0.6deg);
+  }
+}
+
+/* Viñeta de nodo · caja con borde violeta + spora al borde */
+.node-frame {
+  position: relative;
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1.5rem;
+}
+.node-frame::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: -1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-spore);
+  box-shadow: 0 0 10px var(--color-spore);
+}
+
+/* Borde hifa · decorativo de tarjetas */
+.hyphae-border {
+  border: 1px solid var(--color-hyphae);
+  position: relative;
+}
+.hyphae-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+.hyphae-border:hover::after {
+  border-color: var(--color-hyphae-glow);
+  box-shadow: 0 0 24px -4px var(--color-hyphae-glow);
+}
+
+/* Underline spore trail · para links */
+a.spore-trail {
+  text-decoration: none;
+  background-image: linear-gradient(to right, var(--color-spore) 0, var(--color-spore) 4px, transparent 4px, transparent 8px);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  padding-bottom: 2px;
+  transition: background-image 200ms ease, color 200ms ease;
+}
+a.spore-trail:hover {
+  background-image: linear-gradient(to right, var(--color-hyphae-glow) 0, var(--color-hyphae-glow) 4px, transparent 4px, transparent 8px);
+}
+
+/* Organic blob · border-radius irregular para fruiting bodies */
+.organic-blob {
+  border-radius: 47% 53% 60% 40% / 50% 45% 55% 50%;
+}
+.organic-blob-2 {
+  border-radius: 38% 62% 55% 45% / 60% 40% 60% 40%;
+}
+
+/* Branching column · conector vertical entre dos bloques */
+.hyphae-vertical {
+  display: block;
+  width: 1.5rem;
+  margin: 0 auto;
+  color: var(--color-hyphae);
+  opacity: 0.5;
+}
+.hyphae-vertical svg {
+  width: 100%;
+  height: 4rem;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Mobile · tap targets · reduced motion
+   ───────────────────────────────────────────────────────────── */
+
+/* Quita el delay de 300 ms y desactiva el zoom por doble-tap en iOS */
+a,
+button,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* Hit-area mínima WCAG 2.5.5 (44×44) para links versalita interactivos.
+   No rompe el padding visual; expande el área de tap. */
+.versalita-spore-trail,
+a.versalita,
+button.versalita {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Reduced motion · quitar transiciones y animaciones decorativas */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .media-zoom:hover > img {
+    transform: none;
+  }
+}

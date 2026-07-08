@@ -1,0 +1,27 @@
+---
+/**
+ * MycelialMark · ilustración micelial original del archivo Wix.
+ * Color preservado (lavanda/violeta claro, ~#AFA0C8) — fuente gráfica del sitio.
+ * Variantes:
+ *   - "frame"  → borde de hifas alrededor
+ *   - "bleed"  → sin marco, edge-to-edge
+ */
+interface Props {
+  variant?: "frame" | "bleed";
+  alt?: string;
+  className?: string;
+  loading?: "eager" | "lazy";
+}
+const { variant = "frame", alt = "", className = "", loading = "lazy" } = Astro.props;
+---
+
+<img
+  src="/mycelial-violet.png"
+  alt={alt}
+  loading={loading}
+  class:list={[
+    "block w-full select-none",
+    variant === "frame" && "hyphae-border",
+    className,
+  ]}
+/>

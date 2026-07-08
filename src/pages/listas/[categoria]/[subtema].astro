@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ColumnSet from "../../../components/ColumnSet.astro";
+import Column from "../../../components/Column.astro";
+import Sporangium from "../../../components/Sporangium.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const subtemas = await getCollection("subtemas");
+  return subtemas.map((entry) => ({
+    params: {
+      categoria: entry.data.categoria,
+      subtema: entry.data.subtema,
+    },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"subtemas">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.titulo} description={entry.data.descripcion}>
+  <a
+    href={`/listas/${entry.data.categoria}/`}
+    class="versalita spore-trail no-underline hover:text-[var(--color-accent)]"
+  >
+    ← Volver a la lista
+  </a>
+
+  <article class="mt-12">
+    <ColumnSet gutter="2rem">
+      <Column span={12} md={3}>
+        <div class="mb-4 flex items-center gap-2">
+          <Sporangium variant="pair" color="spore" size={16} />
+          <p class="versalita m-0">Subtema</p>
+        </div>
+      </Column>
+
+      <Column span={12} md={9}>
+        <header class="pb-12">
+          <h1 class="h1-tilt mb-6" style="font-style: italic;">{entry.data.titulo}</h1>
+          {entry.data.descripcion && (
+            <p class="lead">{entry.data.descripcion}</p>
+          )}
+        </header>
+
+        <div class="prose first-p-lead prose-invert">
+          <Content />
+        </div>
+      </Column>
+    </ColumnSet>
+  </article>
+</BaseLayout>

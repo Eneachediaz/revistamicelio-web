@@ -1,0 +1,28 @@
+---
+/**
+ * SLabLogo · logo original de s-Lab (s⌐ab con la mano/pie como "L").
+ * Lockup completo en una sola imagen PNG — la tipografía es parte del dibujo.
+ */
+interface Props {
+  href?: string;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}
+const { href = "/s-lab", size = "md", className = "" } = Astro.props;
+
+const dim = { sm: 96, md: 140, lg: 192 }[size];
+---
+
+<a
+  href={href}
+  class:list={["group inline-flex items-center justify-center no-underline", className]}
+  aria-label="s-Lab · inicio"
+>
+  <img
+    src="/slab-logo.png"
+    alt="s-Lab"
+    width={dim}
+    height={dim * (800 / 800)}
+    class="block transition group-hover:drop-shadow-[0_0_18px_var(--color-hyphae-glow)]"
+  />
+</a>

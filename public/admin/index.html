@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Revista Micelio · Panel editorial</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root { color-scheme: dark; }
+      html, body {
+        background: #0a0c0a;
+        color: #e8e4d3;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        margin: 0;
+        min-height: 100vh;
+      }
+      #sveltia-cms { min-height: 100vh; }
+      .loading {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        text-align: center;
+      }
+      .loading p { opacity: .7; font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <div id="sveltia-cms">
+      <div class="loading">
+        <p>Cargando panel editorial…</p>
+      </div>
+    </div>
+
+    <!-- Sveltia CMS SPA · cargado desde CDN oficial, sin build local -->
+    <script type="module" src="https://unpkg.com/@sveltia/cms@^6.0.2/dist/sveltia-cms.js"></script>
+  </body>
+</html>

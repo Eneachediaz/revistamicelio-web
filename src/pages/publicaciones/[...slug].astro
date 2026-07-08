@@ -1,0 +1,100 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionDivider from "../../components/SectionDivider.astro";
+import MediaItem from "../../components/MediaItem.astro";
+import Sporangium from "../../components/Sporangium.astro";
+import { getCollection, render } from "astro:content";
+import { TIPO_LABELS, type Publicacion } from "../../lib/tipos";
+import { formatSpanishDate } from "../../lib/dates";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("publicaciones");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Publicacion;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { data } = post;
+
+// Fallback temporal de OG: usa el logo del header hasta que el equipo
+// editorial provea public/images/og/sello-micelio.jpg (1200×630).
+const ogFallback = "/logo.png";
+const externalHost = (() => {
+  if (data.tipo !== "traduccion" || !("original" in data)) return null;
+  try { return new URL(data.original).hostname.replace(/^www\./, ""); } catch { return null; }
+})();
+---
+
+<BaseLayout
+  title={data.titulo}
+  description={data.resumen}
+  ogImage={data.portada ?? ogFallback}
+>
+  <a href="/publicaciones/" class="versalita spore-trail no-underline hover:text-[var(--color-accent)]">
+    ← Publicaciones
+  </a>
+
+  <article class="mx-auto mt-12 max-w-3xl">
+    <header class="pb-12">
+      <div class="versalita mb-4 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <Sporangium variant="pair" color="spore" size={18} className="mr-1" />
+        <span>{TIPO_LABELS[data.tipo]}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={data.fecha.toISOString()}>{formatSpanishDate(data.fecha)}</time>
+        {"citas" in data && data.citas && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>Citas {data.citas}</span>
+          </>
+        )}
+        {"paginas" in data && data.paginas && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>{data.paginas} {data.paginas === 1 ? "página" : "páginas"}</span>
+          </>
+        )}
+      </div>
+      <h1 class="h1-tilt mb-6 italic">{data.titulo}</h1>
+      <p class="versalita">por {data.autor}</p>
+      {data.resumen && (
+        <p class="lead mt-10">{data.resumen}</p>
+      )}
+    </header>
+
+    {data.portada && (
+      <figure class="my-12">
+        <MediaItem src={data.portada} alt={data.titulo} sizes="(min-width: 768px) 720px, 100vw" />
+      </figure>
+    )}
+
+    <div class:list={["prose post-body prose-invert", !data.resumen && "first-p-lead"]}>
+      <Content />
+    </div>
+
+    {data.tipo === "traduccion" && "original" in data && (
+      <aside class="mt-16">
+        <SectionDivider />
+        <div class="mt-6 space-y-2 text-sm">
+          <p class="versalita">Texto original</p>
+          <p>
+            <a
+              href={data.original}
+              rel="noopener noreferrer"
+              aria-label={externalHost ? `Texto original en ${externalHost} (enlace externo)` : "Texto original (enlace externo)"}
+              class="break-all"
+            >{data.original}</a>
+          </p>
+          <p class="versalita mt-4">Derechos</p>
+          <p>{data.derechos}</p>
+        </div>
+      </aside>
+    )}
+  </article>
+</BaseLayout>

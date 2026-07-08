@@ -1,0 +1,37 @@
+---
+/**
+ * Logo · lockup gráfico de Revista Micelio.
+ * Usa el logo original de la marca (mano con venas/hojas + cielo estrellado)
+ * combinado con la palabra "Micelio" en tipografía display.
+ */
+interface Props {
+  href?: string;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}
+const { href = "/", size = "md", className = "" } = Astro.props;
+
+const dim = { sm: 36, md: 48, lg: 64 }[size];
+const wordSize = { sm: "text-xl", md: "text-2xl", lg: "text-3xl" }[size];
+---
+
+<a
+  href={href}
+  class:list={["group inline-flex items-center gap-3 no-underline", className]}
+  aria-label="Revista Micelio · inicio"
+>
+  <span class="inline-flex shrink-0 items-center" style={`width:${dim}px;height:${dim}px;`}>
+    <img
+      src="/logo.png"
+      alt=""
+      width={dim}
+      height={dim}
+      class="block"
+    />
+  </span>
+  <span
+    class:list={["font-[family-name:var(--font-display)] leading-none text-[var(--color-ink)] transition group-hover:text-[var(--color-accent)]", wordSize]}
+  >
+    Revista <em class="not-italic text-[var(--color-accent)]">Micelio</em>
+  </span>
+</a>

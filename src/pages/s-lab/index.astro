@@ -1,0 +1,158 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+import SectionDivider from "../../components/SectionDivider.astro";
+import ColumnSet from "../../components/ColumnSet.astro";
+import Column from "../../components/Column.astro";
+import Sporangium from "../../components/Sporangium.astro";
+import SLabLogo from "../../components/SLabLogo.astro";
+import Hyphae from "../../components/Hyphae.astro";
+import { formatSpanishDate } from "../../lib/dates";
+
+const sesiones = (await getCollection("sesiones"))
+  .sort((a, b) => a.data.fecha.valueOf() - b.data.fecha.valueOf());
+
+const rendered = await Promise.all(
+  sesiones.map(async (s) => ({ s, html: (await render(s)).Content }))
+);
+---
+
+<BaseLayout
+  title="s-Lab"
+  description="Laboratorio presencial de traducción experimental de Revista Micelio."
+>
+  <header class="pt-8 md:pt-16">
+    <div class="mb-8 flex items-center gap-3">
+      <Sporangium variant="cluster" color="spore" size={32} />
+      <p class="versalita m-0">Laboratorio</p>
+    </div>
+
+    <div class="my-10 max-w-md" aria-hidden="true">
+      <Hyphae variant="branch" color="hyphae" />
+    </div>
+
+    <div class="mb-10">
+      <SLabLogo size="lg" />
+    </div>
+
+    <h1 class="h1-tilt mb-12" style="font-style: italic;">s-Lab</h1>
+    <p class="lead">
+      El s-Lab es el laboratorio presencial de traducción experimental de Revista Micelio.
+      Un espacio donde traducir en conjunto un texto breve —literario, ensayístico, poético—
+      poniendo el cuerpo y la voz en el ejercicio.
+    </p>
+  </header>
+
+  <SectionDivider />
+
+  <section class="space-y-8">
+    <ColumnSet gutter="2rem">
+      <Column span={12} md={9}>
+        <p class="versalita mb-2">2025</p>
+        <h2
+          class="mb-4"
+          style="font-style: italic; font-size: clamp(1.5rem, 2.5vw, 2rem);"
+        >
+          Laboratorio de traducción inglés-español
+        </h2>
+      </Column>
+    </ColumnSet>
+
+    <div class="prose first-p-lead prose-invert max-w-3xl">
+      <p>
+        La traducción, nos dice Glissant, es como un arte de la fuga: "una renunciación
+        que se consuma". Renunciamos a la equivalencia, a la traducción absoluta, a la
+        transposición. En el arte de traducir, la práctica de la huella (trace) nos
+        indica lo incierto, lo amenazado, en oposición a las ideas de totalidad. Es un
+        arte de la aproximación, del roce, "una manera de frecuentar la huella". Cuando
+        traducimos no conjugamos dos sistemas de transparencia. En cambio, nos
+        proponemos pensar la traducción como una apertura a la opacidad de las
+        existencias irreductibles.
+      </p>
+      <p>
+        Este es un llamado a lxs traductores deseantes de Relación, de bio y
+        geopoéticas difractadas en el Caos-mundo, para resistir juntxs al
+        monolingüismo y al antropocentrismo. Revista Micelio lxs invita a
+        participar en el laboratorio presencial Seta-Lab, donde nos aproximaremos
+        al arte de traducir como una práctica experimental colectiva.
+      </p>
+      <p>
+        En 2025 veremos bases de traducción. A partir del 2026, exploraremos la
+        ecotraducción, la inter- y biosemiótica.
+      </p>
+      <p>Lugar y fecha por definir.</p>
+    </div>
+
+    <div class="prose first-p-lead prose-invert max-w-3xl">
+      <h3>Postulación</h3>
+      <ul>
+        <li>
+          Formulario de postulación: <a href="https://forms.gle/2whBUx7c8gx9uBhB9" rel="noopener">https://forms.gle/2whBUx7c8gx9uBhB9</a>
+        </li>
+        <li>Fecha límite: 28 de septiembre 2025</li>
+        <li>Respuesta postulaciones: primera semana de octubre</li>
+        <li>Primer encuentro: segunda semana de octubre, fecha exacta por definir</li>
+      </ul>
+    </div>
+
+    <div class="prose first-p-lead prose-invert max-w-3xl">
+      <h3>Programa 2025</h3>
+      <p><em>octubre-diciembre</em></p>
+      <ul>
+        <li>Sesión I: Introducción, horario y selección de textos</li>
+        <li>Sesión II: Identificar problemas de traducción</li>
+        <li>Sesión III: Investigar para la traducción</li>
+        <li>Sesión IV: Errores comunes</li>
+        <li>Sesión V: Revisar una traducción</li>
+        <li>Sesión VI: Lectura final. Propuesta de proyecto editorial</li>
+      </ul>
+      <p>Talleres por Laura Mejía.</p>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <section class="space-y-20">
+    {rendered.map(({ s, html: Content }) => (
+      <ColumnSet gutter="2rem">
+        <Column span={12} md={3}>
+          <p class="versalita mb-3">{formatSpanishDate(s.data.fecha)}</p>
+          {s.data.facilitador && (
+            <p class="versalita mb-6">Facilita · {s.data.facilitador}</p>
+          )}
+          {s.data.ejes.length > 0 && (
+            <ul class="versalita flex flex-col gap-y-1">
+              {s.data.ejes.map((eje) => <li>{eje}</li>)}
+            </ul>
+          )}
+        </Column>
+
+        <Column span={12} md={9}>
+          <article>
+            <h2
+              class="mb-4"
+              style="font-style: italic; font-size: clamp(1.5rem, 2.5vw, 2rem);"
+            >
+              {s.data.titulo}
+            </h2>
+            <p class="mb-6 text-[var(--color-ink)]/90">{s.data.descripcion}</p>
+
+            <div class="prose first-p-lead prose-invert text-base">
+              <Content />
+            </div>
+          </article>
+        </Column>
+      </ColumnSet>
+    ))}
+  </section>
+
+  <SectionDivider />
+
+  <aside class="mx-auto max-w-2xl text-center">
+    <h2 class="asterisco-titulo mb-6">¿Cómo participar?</h2>
+    <p class="text-[var(--color-ink)]/90">
+      Las sesiones se anuncian por Instagram (<a href="https://www.instagram.com/revistamicelio/" rel="noopener">@revistamicelio</a>)
+      y se realizan en sede rotativa. La participación es gratuita y abierta. No hace falta experiencia previa en traducción.
+    </p>
+  </aside>
+</BaseLayout>

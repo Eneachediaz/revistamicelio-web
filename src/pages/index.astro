@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import PublicationCard from "../components/PublicationCard.astro";
+import SectionDivider from "../components/SectionDivider.astro";
+import Sporangium from "../components/Sporangium.astro";
+import Hyphae from "../components/Hyphae.astro";
+import { formatSpanishDate } from "../lib/dates";
+
+const posts = (await getCollection("publicaciones"))
+  .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf())
+  .slice(0, 3);
+
+const now = new Date();
+const upcomingSessions = (await getCollection("sesiones"))
+  .filter((s) => s.data.fecha.valueOf() > now.valueOf())
+  .sort((a, b) => a.data.fecha.valueOf() - b.data.fecha.valueOf());
+const nextSession = upcomingSessions[0] ?? null;
+---
+
+<BaseLayout
+  title="Revista Micelio"
+  description="Portal editorial sobre ecología oscura, traducción experimental y fabulación especulativa desde América Latina."
+>
+  <section class="relative pt-8 pb-20 md:pt-16 md:pb-28">
+    <div class="container-editorial">
+      <div class="mb-8 flex items-center gap-3">
+        <Sporangium variant="cluster" color="spore" size={36} />
+        <p class="versalita m-0">Bienvenide</p>
+      </div>
+
+      <h1
+        class="h1-tilt mb-10 max-w-5xl"
+        style="font-style: italic;"
+      >
+        Lo que crece <em class="text-[var(--color-accent)] not-italic">bajo tierra</em> conecta todo lo que vive arriba.
+      </h1>
+
+      <div class="mb-12 max-w-3xl" aria-hidden="true">
+        <Hyphae variant="branch" color="hyphae" />
+      </div>
+
+      <p class="lead max-w-2xl">
+        Revista Micelio es un portal editorial sobre ecología oscura, traducción
+        experimental y fabulación especulativa desde América Latina. Publicamos
+        ensayos, narrativas, poesía, traducciones y reseñas que piensan la crisis
+        que habitamos.
+      </p>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <section>
+    <header class="mb-12 flex flex-wrap items-baseline justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <Sporangium variant="cluster" color="spore" size={32} />
+        <h2 class="asterisco-titulo m-0">Novedades editoriales</h2>
+      </div>
+      <a
+        href="/publicaciones/"
+        class="versalita spore-trail no-underline hover:text-[var(--color-accent)]"
+      >
+        Ver todas →
+      </a>
+    </header>
+
+    <div>
+      {posts.map((post) => <PublicationCard post={post} />)}
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <section>
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-11 md:gap-12">
+      <a href="/s-lab/" class="group block no-underline md:col-span-5">
+        <div class="mb-3 flex items-center gap-2">
+          <Sporangium variant="pair" color="spore" size={18} />
+          <p class="versalita m-0">Próxima sesión</p>
+        </div>
+        <h3
+          class="mb-2 text-[var(--color-ink)] transition group-hover:text-[var(--color-accent)]"
+          style="font-style: italic;"
+        >
+          {nextSession ? nextSession.data.titulo : "s-Lab · Laboratorio de ecotraducción"}
+        </h3>
+        <p class="versalita">
+          {nextSession
+            ? `${formatSpanishDate(nextSession.data.fecha)} · sede rotativa`
+            : "Inscripciones abiertas · escríbenos a revistamicelio@gmail.com"}
+        </p>
+      </a>
+
+      <div class="hidden md:col-span-1 md:flex md:items-center md:justify-center" aria-hidden="true">
+        <div class="h-full w-px bg-[var(--color-border)]"></div>
+      </div>
+
+      <a href="/convocatoria/" class="group block no-underline md:col-span-5">
+        <div class="mb-3 flex items-center gap-2">
+          <Sporangium variant="pair" color="spore" size={18} />
+          <p class="versalita m-0">¿Quieres publicar?</p>
+        </div>
+        <h3
+          class="mb-2 text-[var(--color-ink)] transition group-hover:text-[var(--color-accent)]"
+          style="font-style: italic;"
+        >
+          Convocatoria abierta
+        </h3>
+        <p class="versalita">Siete formatos · respuesta en 60 días</p>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

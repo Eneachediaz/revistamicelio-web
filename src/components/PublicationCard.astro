@@ -1,0 +1,96 @@
+---
+import MediaItem from "./MediaItem.astro";
+import Sporangium from "./Sporangium.astro";
+import Hyphae from "./Hyphae.astro";
+import { TIPO_LABELS, type Publicacion } from "../lib/tipos";
+import { formatSpanishDate } from "../lib/dates";
+
+interface Props {
+  post: Publicacion;
+}
+
+const { post } = Astro.props;
+const { data, id } = post;
+---
+
+<article class="group relative grid items-start grid-cols-1 gap-8 py-16 md:grid-cols-[1.6fr_2fr] md:gap-12">
+  <div class="relative">
+    {data.portada ? (
+      <a href={`/publicaciones/${id}/`} class="block">
+        <div class="absolute left-0 top-0 z-10 md:-left-2 md:-top-2" aria-hidden="true">
+          <Sporangium variant="cluster" color="spore" size={28} />
+        </div>
+        <MediaItem
+          src={data.portada}
+          alt={data.titulo}
+          zoom={true}
+          sizes="(min-width: 768px) 38vw, 100vw"
+        />
+      </a>
+    ) : (
+      <a href={`/publicaciones/${id}/`} class="block">
+        <div class="relative">
+          <div class="absolute left-0 top-0 z-10 md:-left-2 md:-top-2" aria-hidden="true">
+            <Sporangium variant="cluster" color="spore" size={28} />
+          </div>
+          <div class="media-item" style="aspect-ratio: 3/2;">
+            <div class="grid h-full w-full place-items-center">
+              <span
+                class="font-[family-name:var(--font-display)] text-7xl text-[var(--color-accent)] opacity-40"
+                aria-hidden="true"
+                style="font-variation-settings: 'opsz' 144, 'wonk' 1;"
+              >*</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    )}
+    <div
+      class="pointer-events-none absolute -bottom-4 -right-4 hidden h-12 w-16 opacity-0 transition duration-500 group-hover:opacity-100 md:block"
+      aria-hidden="true"
+    >
+      <Hyphae variant="branch" color="hyphae" />
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center">
+    <div class="versalita mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+      <Sporangium variant="pair" color="spore" size={18} className="mr-1" />
+      <span>{TIPO_LABELS[data.tipo]}</span>
+      <span aria-hidden="true">·</span>
+      <time datetime={data.fecha.toISOString()}>{formatSpanishDate(data.fecha)}</time>
+      {"citas" in data && data.citas && (
+        <>
+          <span aria-hidden="true">·</span>
+          <span>Citas {data.citas}</span>
+        </>
+      )}
+    </div>
+
+    <h2
+      class="mb-4 font-[family-name:var(--font-display)]"
+      style="font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1.1;"
+    >
+      <a
+        href={`/publicaciones/${id}/`}
+        class="text-[var(--color-ink)] no-underline transition group-hover:text-[var(--color-accent)]"
+      >
+        {data.titulo}
+      </a>
+    </h2>
+
+    <p class="versalita mb-6">por {data.autor}</p>
+
+    {data.resumen && (
+      <p class="max-w-prose text-lg text-[var(--color-ink)]/90">{data.resumen}</p>
+    )}
+
+    <a
+      href={`/publicaciones/${id}/`}
+      class="versalita mt-6 inline-flex w-fit items-center gap-2 no-underline"
+    >
+      <span class="spore-dot" data-size="sm" aria-hidden="true"></span>
+      <span class="text-[var(--color-ink-muted)] transition group-hover:text-[var(--color-accent)]">Leer</span>
+    </a>
+  </div>
+</article>

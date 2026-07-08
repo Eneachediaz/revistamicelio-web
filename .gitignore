@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+.vscode/
+.idea/
+chrome-headless-shell/
+
+# Material de trabajo residual de la migración Wix.
+# No se referencia desde el sitio; revisar antes de borrar definitivamente.
+public/images/uploads/originals/

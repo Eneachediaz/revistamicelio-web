@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Sporangium from "../components/Sporangium.astro";
+---
+
+<BaseLayout
+  title="Página no encontrada"
+  description="El sendero que buscas aún no ha sido tejido por el micelio."
+>
+  <section class="relative flex min-h-[60vh] flex-col items-center justify-center text-center">
+    <div class="mb-6" aria-hidden="true">
+      <Sporangium variant="cluster" color="spore" size={48} />
+    </div>
+
+    <h1
+      class="mb-6 max-w-3xl font-[family-name:var(--font-display)]"
+      style="font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.1; font-style: italic;"
+    >
+      Algunos senderos aún no han sido tejidos por el micelio.
+    </h1>
+
+    <p class="lead mb-10 max-w-xl text-[var(--color-ink-muted)]">
+      La página que buscas no existe o ha cambiado de raíz. Vuelve al inicio y
+      sigue explorando la red.
+    </p>
+
+    <a
+      href="/"
+      class="versalita inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-6 py-3 no-underline transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+    >
+      <span class="spore-dot" data-size="sm" aria-hidden="true"></span>
+      <span>Volver al inicio</span>
+    </a>
+  </section>
+</BaseLayout>

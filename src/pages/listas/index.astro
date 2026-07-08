@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionDivider from "../../components/SectionDivider.astro";
+import Sporangium from "../../components/Sporangium.astro";
+import { getCollection } from "astro:content";
+
+const listas = await getCollection("listas");
+
+const categoriaDescriptions: Record<string, string> = {
+  "animales-no-humanos":  "Agencia animal, multiespecie y cuidado.",
+  "naturaleza-ambiente":  "Antropoceno, extractivismo y territorio.",
+  "fabulacion-especulativa": "Ficción que especula futuros posibles.",
+  "cli-fi-latinoamericano": "Ficción climática desde América Latina.",
+};
+---
+
+<BaseLayout
+  title="Listas"
+  description="Directorios bibliográficos categorizados: animales no-humanos, naturaleza y ambiente, fabulación especulativa, cli-fi latinoamericano."
+>
+  <header class="pt-8 md:pt-16">
+    <div class="mb-8 flex items-center gap-3">
+      <Sporangium variant="cluster" color="spore" size={32} />
+      <p class="versalita m-0">Buqué de referencias</p>
+    </div>
+    <h1 class="h1-tilt mb-12" style="font-style: italic;">Listas</h1>
+    <p class="lead">
+      Cuatro directorios bibliográficos editables desde el <a href="/admin/">panel</a>.
+      Cada lista combina referencias teóricas, ensayos propios y obras que dialogan
+      con el campo editorial de la revista.
+    </p>
+  </header>
+
+  <SectionDivider />
+
+  <div class="grid gap-16 md:grid-cols-2">
+    {listas.map((lista) => (
+      <a
+        href={`/listas/${lista.data.categoria}/`}
+        class="group block no-underline"
+      >
+        <h2
+          class="mb-3 text-[var(--color-ink)] group-hover:text-[var(--color-accent)]"
+          style="font-style: italic; font-size: clamp(1.5rem, 2.5vw, 2rem);"
+        >
+          {lista.data.titulo}
+        </h2>
+        <p class="versalita mb-4">{categoriaDescriptions[lista.data.categoria]}</p>
+        {lista.data.conceptos.length > 0 && (
+          <ul class="versalita flex flex-wrap gap-x-3 gap-y-1">
+            {lista.data.conceptos.slice(0, 5).map((c, i) => (
+              <li>
+                {c}{i < Math.min(lista.data.conceptos.length, 5) - 1 && <span class="ml-3 text-[var(--color-accent)]" aria-hidden="true">·</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+        <p class="versalita mt-6 text-[var(--color-accent)] group-hover:text-[var(--color-ink)]">
+          Explorar lista →
+        </p>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

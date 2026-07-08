@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PublicationCard from "../../components/PublicationCard.astro";
+import SectionDivider from "../../components/SectionDivider.astro";
+import Sporangium from "../../components/Sporangium.astro";
+import Hyphae from "../../components/Hyphae.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("publicaciones"))
+  .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
+---
+
+<BaseLayout
+  title="Publicaciones"
+  description="Ensayos, narrativas, poesía, traducciones y reseñas de Revista Micelio."
+>
+  <header class="pt-8 md:pt-16">
+    <div class="mb-8 flex items-center gap-3">
+      <Sporangium variant="cluster" color="spore" size={32} />
+      <p class="versalita m-0">Archivo</p>
+    </div>
+    <h1 class="h1-tilt mb-12" style="font-style: italic;">Publicaciones</h1>
+    <p class="lead">
+      Siete formatos, una línea editorial: pensar la crisis ecológica desde la literatura
+      y la traducción. Todo el contenido está disponible bajo licencia Creative Commons BY-NC 4.0.
+    </p>
+    <div class="mt-10" aria-hidden="true">
+      <Hyphae variant="trail" color="spore" />
+    </div>
+  </header>
+
+  <SectionDivider />
+
+  <div>
+    {posts.map((post) => <PublicationCard post={post} />)}
+  </div>
+
+  {posts.length === 0 && (
+    <p class="text-center text-[var(--color-ink-muted)]">
+      Aún no hay publicaciones. Vuelve pronto, o pasa por el <a href="/admin/">panel editorial</a>.
+    </p>
+  )}
+</BaseLayout>

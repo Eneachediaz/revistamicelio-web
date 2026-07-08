@@ -1,0 +1,81 @@
+---
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import MycelialBackground from "../components/MycelialBackground.astro";
+
+import frauncesLatin from "@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2?url";
+import sourceSerifLatin from "@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2?url";
+import interLatin from "@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = "Revista Micelio · ecología oscura, traducción y fabulación especulativa.",
+  ogImage = "/images/uploads/portada-collage-violet.jpg",
+} = Astro.props;
+
+const siteName = "Revista Micelio";
+const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://revistamicelio.com").toString();
+const ogImageUrl = new URL(ogImage, Astro.site ?? "https://revistamicelio.com").toString();
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#08090a" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="preload" href={frauncesLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={sourceSerifLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="es_ES" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
+
+    <!-- Cloudflare Web Analytics · privacy-first, sin cookies -->
+    <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REEMPLAZAR_CON_TOKEN_DE_CLOUDFLARE"}'></script>
+  </head>
+  <body>
+    <MycelialBackground opacity={0.16} />
+
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-[var(--color-surface-2)] focus:px-3 focus:py-2 focus:text-sm focus:text-[var(--color-ink)]"
+    >
+      Saltar al contenido principal
+    </a>
+
+    <Nav />
+    <main id="main" class="container-editorial py-8 md:py-24">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

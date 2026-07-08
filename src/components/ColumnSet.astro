@@ -1,0 +1,15 @@
+---
+/**
+ * ColumnSet · sistema de columnas asimétricas al estilo multiplicatio
+ * 12 columnas, gutter configurable, slots con `Column` de span propio.
+ */
+interface Props {
+  gutter?: string;
+  className?: string;
+}
+const { gutter = "1.5rem", className = "" } = Astro.props;
+---
+
+<div class:list={["column-set", className]} style={`gap: ${gutter};`}>
+  <slot />
+</div>

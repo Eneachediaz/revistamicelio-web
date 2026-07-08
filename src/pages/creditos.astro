@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionDivider from "../components/SectionDivider.astro";
+import Sporangium from "../components/Sporangium.astro";
+import Hyphae from "../components/Hyphae.astro";
+import { getCollection, render } from "astro:content";
+
+const creditos = (await getCollection("creditos"))
+  .sort((a, b) => a.data.orden - b.data.orden);
+
+const tipoLabel: Record<string, string> = {
+  libro:       "Libro",
+  video:       "Video",
+  articulo:    "Artículo",
+  audio:       "Audio",
+  "sitio-web": "Sitio web",
+};
+
+const rendered = await Promise.all(
+  creditos.map(async (c) => ({ c, Content: (await render(c)).Content }))
+);
+---
+
+<BaseLayout
+  title="Bibliografía del sitio"
+  description="Obras citadas y referenciadas en la línea gráfica y editorial de Revista Micelio."
+>
+  <header class="pt-8 md:pt-16">
+    <div class="mb-8 flex items-center gap-3">
+      <Sporangium variant="cluster" color="spore" size={32} />
+      <p class="versalita m-0">Bibliografía</p>
+    </div>
+    <h1 class="h1-tilt mb-12" style="font-style: italic;">Bibliografía del sitio</h1>
+    <p class="lead">
+      Obras, videos y referencias que nutren la línea editorial y gráfica de Revista Micelio.
+      Esta página se edita desde el <a href="/admin/">panel de Sveltia CMS</a>.
+    </p>
+    <div class="mt-10" aria-hidden="true">
+      <Hyphae variant="trail" color="spore" />
+    </div>
+  </header>
+
+  <SectionDivider />
+
+  <ol class="space-y-12 md:space-y-16">
+    {rendered.map(({ c, Content }) => (
+      <li class="grid gap-2 md:grid-cols-[7rem_1fr] md:gap-4">
+        <span class="versalita self-baseline">{tipoLabel[c.data.tipo]}</span>
+        <div>
+          <p
+            class="font-[family-name:var(--font-display)] text-2xl text-[var(--color-ink)] md:text-3xl"
+            style="font-style: italic;"
+          >
+            {c.data.obra}
+          </p>
+          <p class="versalita mt-2">
+            {c.data.autor}{c.data.anio ? ` · ${c.data.anio}` : ""}
+          </p>
+          <div class="prose first-p-lead prose-invert mt-4 max-w-none text-base">
+            <Content />
+          </div>
+          {c.data.url && (
+            <a href={c.data.url} rel="noopener" class="versalita mt-3 inline-block text-[var(--color-accent)] no-underline hover:text-[var(--color-ink)]">
+              {c.data.url} →
+            </a>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</BaseLayout>

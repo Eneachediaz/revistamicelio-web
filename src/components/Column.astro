@@ -1,0 +1,19 @@
+---
+/**
+ * Column · slot dentro de un ColumnSet
+ * `span` controla el ancho en mobile (1-12) y `md` lo sobrescribe en desktop.
+ */
+interface Props {
+  span?: number;
+  md?: number;
+  className?: string;
+}
+const { span = 12, md, className = "" } = Astro.props;
+
+const mobileClass = `col-span-${span}`;
+const desktopClass = md ? `md:col-span-${md}` : "";
+---
+
+<div class:list={["column", mobileClass, desktopClass, className]}>
+  <slot />
+</div>

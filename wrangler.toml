@@ -1,0 +1,9 @@
+name = "revistamicelio-web"
+compatibility_date = "2025-09-01"
+pages_build_output_dir = "dist"
+
+# Variables de entorno requeridas en Cloudflare Pages → Settings → Environment variables
+# (NO commiteadas al repositorio):
+#   GITHUB_CLIENT_ID      — GitHub OAuth App Client ID
+#   GITHUB_CLIENT_SECRET  — GitHub OAuth App Client Secret
+#   NODE_VERSION          — fijar en "22" (Astro 6 requiere ≥ 20.19; el default LTS de Pages puede ser anterior)

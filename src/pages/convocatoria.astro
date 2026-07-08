@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getEntry, render } from "astro:content";
+import Sporangium from "../components/Sporangium.astro";
+
+const entry = await getEntry("pages", "convocatoria");
+if (!entry) throw new Error("No se encontró la página 'convocatoria' en la colección 'pages'.");
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.titulo} description={entry.data.descripcion}>
+  <article class="mx-auto max-w-3xl pt-8 md:pt-16">
+    <div class="mb-8 flex items-center gap-3">
+      <Sporangium variant="cluster" color="spore" size={32} />
+      <p class="versalita m-0">Convocatoria</p>
+    </div>
+    <h1 class="h1-tilt mb-12" style="font-style: italic;">{entry.data.titulo}</h1>
+    <div class="prose first-p-lead prose-invert">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

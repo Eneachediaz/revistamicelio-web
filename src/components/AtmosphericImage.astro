@@ -1,0 +1,52 @@
+---
+/**
+ * AtmosphericImage · tratamiento "Witches den" / fungic horror
+ * Imagen con overlay oscuro, grano opcional y tinte de acento opcional.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  intensity?: "light" | "medium" | "heavy";
+  noise?: boolean;
+  bleed?: boolean;
+  aspect?: string;
+  tint?: "violet" | "ochre" | "green" | "none";
+  className?: string;
+}
+
+const {
+  src,
+  alt,
+  intensity = "medium",
+  noise = false,
+  bleed = false,
+  aspect,
+  tint = "none",
+  className = "",
+} = Astro.props;
+
+const tintRgba: Record<string, string> = {
+  violet: "155, 95, 181",
+  ochre:  "200, 154, 58",
+  green:  "127, 181, 106",
+  none:   "0, 0, 0",
+};
+const tintColor = tintRgba[tint];
+---
+
+<figure
+  class:list={["atmospheric", bleed && "bleed", className]}
+  style={aspect ? `aspect-ratio: ${aspect};` : undefined}
+>
+  <img src={src} alt={alt} loading="lazy" />
+  <div class="overlay" data-intensity={intensity} aria-hidden="true"></div>
+  {tint !== "none" && (
+    <div
+      class="tint"
+      aria-hidden="true"
+      style={`background-color: rgba(${tintColor}, 0.22); mix-blend-mode: color;`}
+    ></div>
+  )}
+  {noise && <div class="grain" aria-hidden="true"></div>}
+  <slot />
+</figure>
