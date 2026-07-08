@@ -25,7 +25,7 @@ Portal editorial de **Revista Micelio** migrado de Wix a un stack Jamstack de c�
 
 ## Requisitos
 
-- **Node.js** ≥ 20.19 (recomendado 22.x). Ver `.nvmrc`.
+- **Node.js** ≥ 22.12. Ver `.nvmrc`.
 - **npm** ≥ 10.
 
 ## Desarrollo local
@@ -63,7 +63,7 @@ El panel `/admin` usa **Sveltia CMS** con backend GitHub. El handshake OAuth se 
    backend:
      name: github
      repo: <ORG>/revistamicelio-web   # ← CAMBIAR
-     branch: main
+     branch: master
      base_url: https://<tu-dominio.pages.dev>/api/auth
    ```
 

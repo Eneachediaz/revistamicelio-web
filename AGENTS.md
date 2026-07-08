@@ -14,7 +14,7 @@ There is no lint, formatter, or test command. Do not invent `npm test` / `npm ru
 
 ## Node version
 
-`.nvmrc` pins `20`, but `astro@6` requires ≥ 20.19 and the README recommends 22.x. `nvm use` before installing.
+`.nvmrc` pins `22`. Astro 6 requires ≥ 22.12. `nvm use` before installing.
 
 ## Repo layout
 
@@ -46,7 +46,7 @@ There is no lint, formatter, or test command. Do not invent `npm test` / `npm ru
 - Admin at `/admin/` (Sveltia loaded from CDN, no build).
 - Required env: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` (see `.env.example`). Same values must be set as secrets in the Cloudflare Pages dashboard.
 - GitHub OAuth App callback URL: `https://<host>/api/auth/callback`. The Function reads `url.origin`, so the same function serves dev (`http://localhost:4321`) and prod without changes.
-- `public/admin/config.yml` wires everything: `repo: revistamicelio/revistamicelio-web`, `branch: main`, `base_url: https://revistamicelio.com/api/auth`. When forking, update this file **and** the README OAuth setup section in lockstep.
+- `public/admin/config.yml` wires everything: `repo: revistamicelio/revistamicelio-web`, `branch: master`, `base_url: https://revistamicelio.com/api/auth`. When forking, update this file **and** the README OAuth setup section in lockstep.
 
 ## Deployment
 
