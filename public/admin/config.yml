@@ -3,8 +3,8 @@
 
 backend:
   name: github
-  repo: revistamicelio/revistamicelio-web
-  branch: main
+  repo: Eneachediaz/revistamicelio-web
+  branch: master
   base_url: https://revistamicelio-web.pages.dev/api/auth
   auth_endpoint: api/auth
   open_authoring: false
