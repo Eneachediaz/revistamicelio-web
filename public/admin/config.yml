@@ -6,7 +6,6 @@ backend:
   repo: Eneachediaz/revistamicelio-web
   branch: master
   base_url: https://revistamicelio-web.pages.dev/api/auth
-  auth_endpoint: api/auth
   open_authoring: false
   squash_merges: true
 
