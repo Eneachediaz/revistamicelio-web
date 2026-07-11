@@ -76,7 +76,7 @@ collections:
       - { label: "Autor/a", name: "autor", widget: "string" }
       - { label: "Fecha", name: "fecha", widget: "datetime", picker_utc: false, format: "YYYY-MM-DD" }
       - { label: "Resumen", name: "resumen", widget: "text", required: false }
-      - { label: "Imagen de portada", name: "portada", widget: "image", required: false, allow_multiple: false }
+      - { label: "Imagen de portada", name: "portada", widget: "image", required: false, multiple: false }
       - label: "Formato de citas (ensayos académicos)"
         name: "citas"
         widget: "select"
