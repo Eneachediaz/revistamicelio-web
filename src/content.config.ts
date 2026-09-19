@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 /* ─────────────────────────────────────────────────────────────
@@ -61,7 +62,7 @@ const publicaciones = defineCollection({
     z.object({
       tipo: z.literal("traduccion"),
       ...basePublication.shape,
-      original: z.string().url(),
+      original: z.url(),
       derechos: z.string().min(3),
     }),
   ]),
@@ -87,7 +88,7 @@ const listas = defineCollection({
       .default("obra"),
     descripcion: z.string().optional(),
     conceptos: z.array(z.string()).default([]),
-    url: z.string().url().optional(),
+    url: z.url().optional(),
   }),
 });
 
@@ -146,7 +147,7 @@ const creditos = defineCollection({
     autor: z.string(),
     anio: z.number().int().optional(),
     tipo: z.enum(["libro", "video", "articulo", "audio", "sitio-web"]).default("libro"),
-    url: z.string().url().optional(),
+    url: z.url().optional(),
     orden: z.number().int().default(0),
   }),
 });

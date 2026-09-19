@@ -58,9 +58,6 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? "https://revistamicelio.com").
 
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
-
-    <!-- Cloudflare Web Analytics · privacy-first, sin cookies -->
-    <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REEMPLAZAR_CON_TOKEN_DE_CLOUDFLARE"}'></script>
   </head>
   <body>
     <MycelialBackground opacity={0.16} />
