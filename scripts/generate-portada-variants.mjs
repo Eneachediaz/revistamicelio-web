@@ -3,9 +3,9 @@
  * generate-portada-variants.mjs
  *
  * Genera variantes WebP responsivas (600/900/1200 px de ancho) para cada
- * portada en public/images/uploads/. Solo procesa archivos cuyo basename
- * matchea /^portada-/ y solo emite variantes si el ancho original excede
- * el target (no upscalea).
+ * imagen en public/images/uploads/ cuyo basename matchea /^(portada-|b8f2fc_)/.
+ * Solo emite variantes si el ancho original excede el target (no upscalea)
+ * y si la variante aún no existe (idempotente).
  *
  * Uso:
  *   node scripts/generate-portada-variants.mjs
@@ -27,11 +27,12 @@ const QUALITY = 78;
 
 const files = fs
   .readdirSync(DIR)
-  .filter((f) => /^portada-/.test(f) && !/-\d+\.webp$/.test(f));
+  .filter((f) => /^(portada-|b8f2fc_)/.test(f) && !/-\d+\.webp$/.test(f));
 
 let totalIn = 0;
 let totalOut = 0;
 let created = 0;
+let skipped = 0;
 
 for (const f of files) {
   const src = path.join(DIR, f);
@@ -44,7 +45,11 @@ for (const f of files) {
   for (const w of WIDTHS) {
     if (meta.width <= w) continue;
     const out = path.join(DIR, `${base}-${w}.webp`);
-    const data = await sharp(src)
+    if (fs.existsSync(out)) {
+      skipped += 1;
+      continue;
+    }
+    const data = await sharp(src, { failOn: "none" })
       .resize({ width: w, withoutEnlargement: true })
       .webp({ quality: QUALITY })
       .toFile(out);
@@ -53,8 +58,8 @@ for (const f of files) {
   }
 }
 
-console.log(`portadas:   ${files.length}`);
-console.log(`variantes:  ${created}`);
+console.log(`imágenes:   ${files.length}`);
+console.log(`variantes:  ${created} (nuevas) · ${skipped} ya existentes`);
 console.log(`in:         ${(totalIn / 1024 / 1024).toFixed(2)} MB`);
 console.log(`out:        ${(totalOut / 1024 / 1024).toFixed(2)} MB`);
 console.log(`ahorro:     -${((1 - totalOut / totalIn) * 100).toFixed(1)}%`);
