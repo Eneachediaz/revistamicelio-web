@@ -4,17 +4,10 @@ import SectionDivider from "../components/SectionDivider.astro";
 import Sporangium from "../components/Sporangium.astro";
 import Hyphae from "../components/Hyphae.astro";
 import { getCollection, render } from "astro:content";
+import { CREDITO_TIPO_LABELS } from "../lib/creditos";
 
 const creditos = (await getCollection("creditos"))
   .sort((a, b) => a.data.orden - b.data.orden);
-
-const tipoLabel: Record<string, string> = {
-  libro:       "Libro",
-  video:       "Video",
-  articulo:    "Artículo",
-  audio:       "Audio",
-  "sitio-web": "Sitio web",
-};
 
 const rendered = await Promise.all(
   creditos.map(async (c) => ({ c, Content: (await render(c)).Content }))
@@ -45,7 +38,7 @@ const rendered = await Promise.all(
   <ol class="space-y-12 md:space-y-16">
     {rendered.map(({ c, Content }) => (
       <li class="grid gap-2 md:grid-cols-[7rem_1fr] md:gap-4">
-        <span class="versalita self-baseline">{tipoLabel[c.data.tipo]}</span>
+        <span class="versalita self-baseline">{CREDITO_TIPO_LABELS[c.data.tipo]}</span>
         <div>
           <p
             class="font-[family-name:var(--font-display)] text-2xl text-[var(--color-ink)] md:text-3xl"

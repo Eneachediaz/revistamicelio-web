@@ -5,13 +5,6 @@ import Sporangium from "../../components/Sporangium.astro";
 import { getCollection } from "astro:content";
 
 const listas = await getCollection("listas");
-
-const categoriaDescriptions: Record<string, string> = {
-  "animales-no-humanos":  "Agencia animal, multiespecie y cuidado.",
-  "naturaleza-ambiente":  "Antropoceno, extractivismo y territorio.",
-  "fabulacion-especulativa": "Ficción que especula futuros posibles.",
-  "cli-fi-latinoamericano": "Ficción climática desde América Latina.",
-};
 ---
 
 <BaseLayout
@@ -45,7 +38,9 @@ const categoriaDescriptions: Record<string, string> = {
         >
           {lista.data.titulo}
         </h2>
-        <p class="versalita mb-4">{categoriaDescriptions[lista.data.categoria]}</p>
+        {lista.data.descripcion && (
+          <p class="versalita mb-4 line-clamp-2">{lista.data.descripcion}</p>
+        )}
         {lista.data.conceptos.length > 0 && (
           <ul class="versalita flex flex-wrap gap-x-3 gap-y-1">
             {lista.data.conceptos.slice(0, 5).map((c, i) => (

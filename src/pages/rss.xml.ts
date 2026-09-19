@@ -1,13 +1,12 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import type { APIContext } from "astro";
+import { byNewest } from "../lib/sort";
 
 export async function GET(context: APIContext) {
   const site = context.site?.toString() ?? "https://revistamicelio.com";
 
-  const posts = (await getCollection("publicaciones")).sort(
-    (a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf()
-  );
+  const posts = (await getCollection("publicaciones")).sort(byNewest);
 
   return rss({
     title: "Revista Micelio",

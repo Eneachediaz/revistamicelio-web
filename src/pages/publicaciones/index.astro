@@ -5,9 +5,9 @@ import SectionDivider from "../../components/SectionDivider.astro";
 import Sporangium from "../../components/Sporangium.astro";
 import Hyphae from "../../components/Hyphae.astro";
 import { getCollection } from "astro:content";
+import { byNewest } from "../../lib/sort";
 
-const posts = (await getCollection("publicaciones"))
-  .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
+const posts = (await getCollection("publicaciones")).sort(byNewest);
 ---
 
 <BaseLayout

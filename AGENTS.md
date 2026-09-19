@@ -24,7 +24,7 @@ There is no lint, formatter, or test command. Do not invent `npm test` / `npm ru
 - `src/styles/global.css` — Tailwind v4 `@theme` tokens + custom utilities (`versalita`, `h1-tilt`, `container-editorial`, `spore-trail`, `asterisco-titulo`). Keep all styles in this file; do not split per component.
 - `src/components/` — Astro components, one file per visual primitive (`Sporangium`, `Hyphae`, `MycelialBackground`, `MycelialMark`, `Nav`, `Footer`, `PublicationCard`, `ColumnSet`+`Column`, `MediaItem`, `Logo`, `SLabLogo`, `SectionDivider`).
 - `src/layouts/BaseLayout.astro` — only layout. Hardcodes `lang="es"`, `color-scheme: dark`, OG/Twitter meta, RSS link.
-- `src/lib/` — shared helpers. `tipos.ts` exports `TIPO_LABELS` (the seven publication `tipo` strings → display labels) and `Tipo` type; `dates.ts` exports `formatSpanishDate(d)`. Do not duplicate these in templates.
+- `src/lib/` — shared helpers. `tipos.ts` exports `TIPO_LABELS` (the seven publication `tipo` strings → display labels) and `Tipo` type; `creditos.ts` exports `CREDITO_TIPO_LABELS`; `dates.ts` exports `formatSpanishDate(d)`; `sort.ts` exports `byNewest` (publicaciones date comparator). Do not duplicate these in templates. `PublicationMeta.astro` renders the shared tipo·fecha·citas meta row.
 - `public/admin/` — Sveltia CMS shell + `config.yml`. Served as static, no build step.
 - `functions/api/auth/[action].ts` — Cloudflare Pages Function for `signin` / `callback` / `signout`. Auto-deployed by Pages when `functions/` exists.
 - `public/images/uploads/` — flat directory of media (portadas + inline illustrations). Wix images were downloaded at `w_1200,h_800,al_c,q_90` and saved with their original `b8f2fc_<id>~mv2.<ext>` filename. Reference as `/images/uploads/<file>` in markdown.

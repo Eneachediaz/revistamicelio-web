@@ -85,11 +85,14 @@ collections:
       - label: "Conteo de palabras"
         name: "wordCount"
         widget: "number"
+        value_type: "int"
+        min: 1
         required: "{{fields.tipo == 'resena' || fields.tipo == 'ensayoAcademico' || fields.tipo == 'ensayoNarrativo' || fields.tipo == 'entrevista' || fields.tipo == 'narrativa'}}"
-        hint: "Validado por Zod en el schema."
+        hint: "Máximos por tipo: reseña 1.000 · ens. académico 8.000 · ens. narrativo 3.500 · entrevista 5.000 · narrativa 3.000. Validado por Zod en el schema."
       - label: "Páginas (poesía)"
         name: "paginas"
         widget: "number"
+        value_type: "int"
         required: "{{fields.tipo == 'poesia'}}"
         min: 1
         max: 5

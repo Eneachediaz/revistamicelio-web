@@ -2,21 +2,21 @@
 import MediaItem from "./MediaItem.astro";
 import Sporangium from "./Sporangium.astro";
 import Hyphae from "./Hyphae.astro";
-import { TIPO_LABELS, type Publicacion } from "../lib/tipos";
-import { formatSpanishDate } from "../lib/dates";
+import PublicationMeta from "./PublicationMeta.astro";
 
 interface Props {
-  post: Publicacion;
+  post: import("../lib/tipos").Publicacion;
 }
 
 const { post } = Astro.props;
 const { data, id } = post;
+const href = `/publicaciones/${id}/`;
 ---
 
 <article class="group relative grid items-start grid-cols-1 gap-8 py-16 md:grid-cols-[1.6fr_2fr] md:gap-12">
   <div class="relative">
     {data.portada ? (
-      <a href={`/publicaciones/${id}/`} class="block">
+      <a href={href} class="block">
         <div class="absolute left-0 top-0 z-10 md:-left-2 md:-top-2" aria-hidden="true">
           <Sporangium variant="cluster" color="spore" size={28} />
         </div>
@@ -28,7 +28,7 @@ const { data, id } = post;
         />
       </a>
     ) : (
-      <a href={`/publicaciones/${id}/`} class="block">
+      <a href={href} class="block">
         <div class="relative">
           <div class="absolute left-0 top-0 z-10 md:-left-2 md:-top-2" aria-hidden="true">
             <Sporangium variant="cluster" color="spore" size={28} />
@@ -54,25 +54,14 @@ const { data, id } = post;
   </div>
 
   <div class="flex flex-col justify-center">
-    <div class="versalita mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
-      <Sporangium variant="pair" color="spore" size={18} className="mr-1" />
-      <span>{TIPO_LABELS[data.tipo]}</span>
-      <span aria-hidden="true">·</span>
-      <time datetime={data.fecha.toISOString()}>{formatSpanishDate(data.fecha)}</time>
-      {"citas" in data && data.citas && (
-        <>
-          <span aria-hidden="true">·</span>
-          <span>Citas {data.citas}</span>
-        </>
-      )}
-    </div>
+    <PublicationMeta post={post} />
 
     <h2
       class="mb-4 font-[family-name:var(--font-display)]"
       style="font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1.1;"
     >
       <a
-        href={`/publicaciones/${id}/`}
+        href={href}
         class="text-[var(--color-ink)] no-underline transition group-hover:text-[var(--color-accent)]"
       >
         {data.titulo}
@@ -86,7 +75,7 @@ const { data, id } = post;
     )}
 
     <a
-      href={`/publicaciones/${id}/`}
+      href={href}
       class="versalita mt-6 inline-flex w-fit items-center gap-2 no-underline"
     >
       <span class="spore-dot" data-size="sm" aria-hidden="true"></span>

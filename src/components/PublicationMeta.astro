@@ -1,0 +1,33 @@
+---
+import Sporangium from "./Sporangium.astro";
+import { TIPO_LABELS, type Publicacion } from "../lib/tipos";
+import { formatSpanishDate } from "../lib/dates";
+
+interface Props {
+  post: Publicacion;
+  className?: string;
+  showPages?: boolean;
+}
+
+const { post, className = "mb-3", showPages = false } = Astro.props;
+const { data } = post;
+---
+
+<div class:list={["versalita", className, "flex flex-wrap items-center gap-x-3 gap-y-1"]}>
+  <Sporangium variant="pair" color="spore" size={18} className="mr-1" />
+  <span>{TIPO_LABELS[data.tipo]}</span>
+  <span aria-hidden="true">·</span>
+  <time datetime={data.fecha.toISOString()}>{formatSpanishDate(data.fecha)}</time>
+  {"citas" in data && data.citas && (
+    <>
+      <span aria-hidden="true">·</span>
+      <span>Citas {data.citas}</span>
+    </>
+  )}
+  {showPages && "paginas" in data && data.paginas && (
+    <>
+      <span aria-hidden="true">·</span>
+      <span>{data.paginas} {data.paginas === 1 ? "página" : "páginas"}</span>
+    </>
+  )}
+</div>
