@@ -6,31 +6,38 @@ import Sporangium from "../../../components/Sporangium.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
 export async function getStaticPaths() {
-  const subtemas = await getCollection("subtemas");
+  const [subtemas, listas] = await Promise.all([
+    getCollection("subtemas"),
+    getCollection("listas"),
+  ]);
+  const hubs = new Set(listas.map((l) => l.data.categoria));
   return subtemas.map((entry) => ({
     params: {
       categoria: entry.data.categoria,
       subtema: entry.data.subtema,
     },
-    props: { entry },
+    props: { entry, hasHub: hubs.has(entry.data.categoria) },
   }));
 }
 
 interface Props {
   entry: CollectionEntry<"subtemas">;
+  hasHub: boolean;
 }
 
-const { entry } = Astro.props;
+const { entry, hasHub } = Astro.props;
 const { Content } = await render(entry);
 ---
 
 <BaseLayout title={entry.data.titulo} description={entry.data.descripcion}>
-  <a
-    href={`/listas/${entry.data.categoria}/`}
-    class="versalita spore-trail no-underline hover:text-[var(--color-accent)]"
-  >
-    ← Volver a la lista
-  </a>
+  {hasHub && (
+    <a
+      href={`/listas/${entry.data.categoria}/`}
+      class="versalita spore-trail no-underline hover:text-[var(--color-accent)]"
+    >
+      ← Volver a la lista
+    </a>
+  )}
 
   <article class="mt-12">
     <ColumnSet gutter="2rem">

@@ -69,7 +69,7 @@ const publicaciones = defineCollection({
 });
 
 /* ─────────────────────────────────────────────────────────────
-   listas: 4 categorías bibliográficas
+   listas: 4 categorías bibliográficas (un hub fijo por categoría)
    ───────────────────────────────────────────────────────────── */
 const listas = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/listas" }),
@@ -81,14 +81,8 @@ const listas = defineCollection({
       "fabulacion-especulativa",
       "cli-fi-latinoamericano",
     ]),
-    autor: z.string().optional(),
-    anio: z.number().int().optional(),
-    tipoReferencia: z
-      .enum(["obra", "articulo", "ensayo-propio", "referencia-teorica"])
-      .default("obra"),
     descripcion: z.string().optional(),
     conceptos: z.array(z.string()).default([]),
-    url: z.url().optional(),
   }),
 });
 

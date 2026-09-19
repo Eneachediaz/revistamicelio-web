@@ -22,7 +22,7 @@ There is no lint, formatter, or test command. Do not invent `npm test` / `npm ru
 - `src/content.config.ts` — single source of truth for content schemas (Zod). `publicaciones` is a `z.discriminatedUnion("tipo", …)` with seven tipos: `resena`, `ensayoAcademico`, `ensayoNarrativo`, `entrevista`, `narrativa`, `poesia`, `traduccion`.
 - `src/content/{publicaciones,listas,subtemas,sesiones,pages,creditos}/` — Markdown/MDX. Folder ↔ collection must match; `public/admin/config.yml` mirrors it. As of the final migration there are 30 publicaciones, 4 listas, 16 subtemas, 6 creditos, 2 pages, 1 sesion.
 - `src/styles/global.css` — Tailwind v4 `@theme` tokens + custom utilities (`versalita`, `h1-tilt`, `container-editorial`, `spore-trail`, `asterisco-titulo`). Keep all styles in this file; do not split per component.
-- `src/components/` — Astro components, one file per visual primitive (`Sporangium`, `Hyphae`, `MycelialBackground`, `MycelialMark`, `Nav`, `Footer`, `PublicationCard`, `ColumnSet`+`Column`, `MediaItem`, `AtmosphericImage`, `Logo`, `SLabLogo`, `SectionDivider`).
+- `src/components/` — Astro components, one file per visual primitive (`Sporangium`, `Hyphae`, `MycelialBackground`, `MycelialMark`, `Nav`, `Footer`, `PublicationCard`, `ColumnSet`+`Column`, `MediaItem`, `Logo`, `SLabLogo`, `SectionDivider`).
 - `src/layouts/BaseLayout.astro` — only layout. Hardcodes `lang="es"`, `color-scheme: dark`, OG/Twitter meta, RSS link.
 - `src/lib/` — shared helpers. `tipos.ts` exports `TIPO_LABELS` (the seven publication `tipo` strings → display labels) and `Tipo` type; `dates.ts` exports `formatSpanishDate(d)`. Do not duplicate these in templates.
 - `public/admin/` — Sveltia CMS shell + `config.yml`. Served as static, no build step.

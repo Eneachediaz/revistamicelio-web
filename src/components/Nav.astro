@@ -3,10 +3,11 @@ import Hyphae from "./Hyphae.astro";
 import Sporangium from "./Sporangium.astro";
 import Logo from "./Logo.astro";
 
-const path = Astro.url.pathname;
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
 const isActive = (href: string) => {
-  if (href === "/") return path === "/";
-  return path === href || path.startsWith(href + "/");
+  const target = href.replace(/\/+$/, "") || "/";
+  if (target === "/") return path === "/";
+  return path === target || path.startsWith(target + "/");
 };
 
 const items = [

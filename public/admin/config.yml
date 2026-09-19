@@ -110,12 +110,12 @@ collections:
     label: "Listas"
     label_singular: "Lista"
     folder: "src/content/listas"
-    create: true
+    create: false
     slug: "{{categoria}}"
     extension: mdx
     format: frontmatter
     summary: "{{titulo}}"
-    sortable_fields: ["categoria", "titulo", "autor", "anio"]
+    sortable_fields: ["categoria", "titulo"]
     view_filters:
       - { label: "Animales no-humanos",     field: categoria, pattern: "animales-no-humanos" }
       - { label: "Naturaleza y ambiente",   field: categoria, pattern: "naturaleza-ambiente" }
@@ -132,13 +132,8 @@ collections:
           - { label: "Fabulación especulativa",           value: "fabulacion-especulativa" }
           - { label: "Cli-fi latinoamericano",            value: "cli-fi-latinoamericano" }
       - { label: "Título", name: "titulo", widget: "string" }
-      - { label: "Autor/a", name: "autor", widget: "string", required: false }
-      - { label: "Año", name: "anio", widget: "number", required: false, value_type: "int", min: 0, max: 2100 }
-      - { label: "Tipo de referencia", name: "tipoReferencia", widget: "select", required: false,
-          options: ["obra", "articulo", "ensayo-propio", "referencia-teorica"], default: "obra" }
       - { label: "Descripción", name: "descripcion", widget: "text", required: false }
       - { label: "Conceptos clave", name: "conceptos", widget: "list", required: false, default: [] }
-      - { label: "URL", name: "url", widget: "url", required: false }
       - { label: "Cuerpo", name: "body", widget: "markdown" }
 
   # ──────────────────────────────────────────

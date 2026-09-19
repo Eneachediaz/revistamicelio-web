@@ -3,7 +3,7 @@
  * MediaItem · imagen en su tamaño natural, sin recorte.
  * Muestra la imagen a su aspect-ratio nativo, escalando al ancho del contenedor.
  *
- * Responsive: si la ruta es un portada-*, emite <picture> con las variantes
+ * Responsive: si la ruta es un portada-* o b8f2fc_*, emite <picture> con las variantes
  * WebP que realmente existen en disco (portada-foo-600.webp, -900, -1200).
  * Las variantes se generan en build con scripts/generate-portada-variants.mjs
  * solo cuando el ancho original excede el target. El browser elige la
@@ -45,7 +45,7 @@ const VARIANT_WIDTHS = [600, 900, 1200] as const;
 const UPLOAD_DIR = path.join(process.cwd(), "public", "images", "uploads");
 
 const availableWidths = (() => {
-  if (!/\/portada-/.test(src)) return [] as number[];
+  if (!/\/(portada-|b8f2fc_)/.test(src)) return [] as number[];
   const extIdx = src.lastIndexOf(".");
   if (extIdx < 0) return [] as number[];
   const base = src.slice(0, extIdx);
