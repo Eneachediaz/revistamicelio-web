@@ -7,10 +7,10 @@ Astro 6 (static) + Tailwind v4 (`@tailwindcss/vite`) + MDX + Sveltia CMS, deploy
 - `npm install`
 - `npm run dev` — dev server on `http://localhost:4321`
 - `npm run build` — produces `dist/` (Astro static output, also `pages_build_output_dir` in `wrangler.toml`)
-- `npm run check` — TS + content-schema check (run before pushing to `main`)
+- `npm run check` — TS + content-schema check (run before pushing to `master`)
 - `npm run preview` — requires a prior `build`
 
-There is no lint, formatter, or test command. Do not invent `npm test` / `npm run lint`. CI is not configured.
+There is no lint, formatter, or test command. Do not invent `npm test` / `npm run lint`. CI (`.github/workflows/ci.yml`) runs `check` + `build` on pushes to `master` and on PRs.
 
 ## Node version
 
@@ -46,7 +46,8 @@ There is no lint, formatter, or test command. Do not invent `npm test` / `npm ru
 - Admin at `/admin/` (Sveltia loaded from CDN, no build).
 - Required env: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` (see `.env.example`). Same values must be set as secrets in the Cloudflare Pages dashboard.
 - GitHub OAuth App callback URL: `https://<host>/api/auth/callback`. The Function reads `url.origin`, so the same function serves dev (`http://localhost:4321`) and prod without changes.
-- `public/admin/config.yml` wires everything: `repo: revistamicelio/revistamicelio-web`, `branch: master`, `base_url: https://revistamicelio.com/api/auth`. When forking, update this file **and** the README OAuth setup section in lockstep.
+- `public/admin/config.yml` wires everything: `repo: Eneachediaz/revistamicelio-web`, `branch: master`, `base_url: https://revistamicelio-web.pages.dev/api/auth`. When forking, update this file **and** the README OAuth setup section in lockstep.
+- Cutover a dominio propio (cuando `revistamicelio.com` entre en producción): (1) actualizar la callback URL de la GitHub OAuth App a `https://revistamicelio.com/api/auth/callback`, (2) cambiar `base_url` en `public/admin/config.yml` a `https://revistamicelio.com/api/auth`, (3) sincronizar este archivo y el README en lockstep.
 
 ## Deployment
 
@@ -60,7 +61,7 @@ There is no lint, formatter, or test command. Do not invent `npm test` / `npm ru
 - The discriminated union in `src/content.config.ts` and the form widgets in `public/admin/config.yml` must stay aligned. Adding a `tipo` or `categoria` requires editing both.
 - `output: "static"` — no SSR. Do not add server endpoints under `src/pages/`.
 - `trailingSlash: "ignore"` in `astro.config.mjs` — Astro defaults to append trailing slashes; this repo strips them.
-- `tsconfig.json` extends `astro/tsconfigs/strict` but `astro check` is not in `scripts`. Run it manually before claiming "type-safe".
+- `tsconfig.json` extends `astro/tsconfigs/strict`; `npm run check` (astro check) is the type gate — CI runs it.
 - The `i18n` block in `astro.config.mjs` configures only `es` with `prefixDefaultLocale: false`. Adding a locale requires touching `astro.config.mjs`, the layout, and every hardcoded `lang="es"`.
 - `dist/` and `.astro/` are gitignored. Do not commit them.
 - `robots.txt` disallows `/admin/`. The admin panel is reachable directly at `/admin/` (Sveltia CMS) but is not linked from public navigation; editors bookmark it themselves.
